@@ -1,10 +1,9 @@
 import { readFileSync } from 'fs';
 import {
-  concatAll,
   concatMap,
   from,
   lastValueFrom,
-  map,
+  reduce,
   scan,
   take,
   toArray,
@@ -13,29 +12,26 @@ import {
 const file = readFileSync(`${__dirname}/input`)
   .toString()
   .split('\n\n')
-  .map((data) => data.split('\n'));
+  .map((data) => data.split('\n').map((value) => Number(value)));
 
-export const solution = (topNumber: number) => {
+export const solution = (topNumber: number): number => {
   return file
-    .map((data) => data.reduce((a, b) => Number(a) + Number(b), 0))
+    .map((data) => data.reduce((acc, value) => acc + value))
     .sort((a, b) => b - a)
     .slice(0, topNumber)
     .reduce((a, b) => a + b);
 };
 
-export const rxjsSolution = async (topNumber: number) => {
-  const stream$ = from(file).pipe(
-    concatMap((val) =>
-      from(val).pipe(scan((acc, value) => acc + Number(value), 0))
+export const rxjsSolution = async (topNumber: number): Promise<number> => {
+  return await lastValueFrom(
+    from(file).pipe(
+      concatMap((val) => from(val).pipe(scan((acc, value) => acc + value))),
+      toArray(),
+      concatMap((v) => v.sort((a, b) => b - a)),
+      take(topNumber),
+      reduce((acc, value) => acc + value),
     ),
-    toArray(),
-    map((arr) => arr.sort((a, b) => b - a)),
-    concatAll(),
-    take(topNumber),
-    toArray()
   );
-
-  return (await lastValueFrom(stream$)).reduce((a, b) => a + b);
 };
 
 [
