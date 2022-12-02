@@ -15,7 +15,7 @@ const file = readFileSync(`${__dirname}/input`)
   .split('\n\n')
   .map((data) => data.split('\n'));
 
-const solution = (topNumber: number) => {
+export const solution = (topNumber: number) => {
   return file
     .map((data) => data.reduce((a, b) => Number(a) + Number(b), 0))
     .sort((a, b) => b - a)
@@ -23,7 +23,7 @@ const solution = (topNumber: number) => {
     .reduce((a, b) => a + b);
 };
 
-const rxjsSolution = async (topNumber: number) => {
+export const rxjsSolution = async (topNumber: number) => {
   const stream$ = from(file).pipe(
     concatMap((val) =>
       from(val).pipe(scan((acc, value) => acc + Number(value), 0))

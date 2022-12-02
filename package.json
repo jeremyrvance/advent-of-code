@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "day": "ts-node -e 'import(`./${process.argv[2] || 2022}/day-${process.argv[1] || 1}/solution`)'",
     "day-run": "ts-node \"2022/day-$DAY/solution.ts\""
@@ -11,12 +12,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "rxjs": "latest",
     "ts-node": "latest",
-    "typescript": "latest",
-    "rxjs": "latest"
+    "typescript": "latest"
   },
   "devDependencies": {
-    "prettier": "latest"
+    "@types/jest": "latest",
+    "jest": "latest",
+    "prettier": "latest",
+    "ts-jest": "latest",
+    "vite": "latest",
+    "vitest": "latest"
   },
   "prettier": {
     "singleQuote": true
