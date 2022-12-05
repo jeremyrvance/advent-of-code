@@ -22,7 +22,6 @@ const createStacks = (matrix: string[]) => {
 
       matrix.forEach((line) => {
         const val = line[index + Number(number) - 1]?.trim();
-
         if (!!val) stack[number].push(val);
       });
 
@@ -34,26 +33,21 @@ const createStacks = (matrix: string[]) => {
 
 const solve = (dataset: string[], orderedStacking = false) => {
   const [matrix, instructions] = dataset;
-
   const stacks = createStacks(matrix.split('\n'));
 
-  const moves = instructions
+  instructions
     .split('\n')
     .map((instruction: string) =>
       Array.from(instruction.matchAll(/\d+/g), (d) => Number(d)),
-    );
+    )
+    .forEach((move: [number, number, number]) => {
+      const [number, from, to] = move;
+      const items = [];
 
-  moves.forEach((move: [number, number, number]) => {
-    const [number, from, to] = move;
+      for (let i = 0; i < number; i++) items.push(stacks[from - 1].pop());
 
-    const items = [];
-
-    for (let i = 0; i < number; i++) items.push(stacks[from - 1].pop());
-
-    const itemsInOrder = orderedStacking ? items.reverse() : items;
-
-    stacks[to - 1].push(...itemsInOrder);
-  });
+      stacks[to - 1].push(...(orderedStacking ? items.reverse() : items));
+    });
 
   return stacks.map((stack) => stack.reverse()[0]).join('');
 };
