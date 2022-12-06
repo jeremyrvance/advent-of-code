@@ -7,14 +7,10 @@ export const sample = readFileSync(`${__dirname}/sample`)
   .split('\n')
   .filter((v) => !!v);
 
-const solve = (dataset: string, requiredUniques: number) =>
-  [...dataset]
-    .map((_, index, chars) => {
-      const set = new Set(chars.slice(index, index + requiredUniques));
-
-      return set.size === requiredUniques ? index + requiredUniques : undefined;
-    })
-    .filter((v) => !!v)[0];
+const solve = (dataset: string, unique: number) =>
+  [...dataset].findIndex((_, index, chars) => {
+    return new Set(chars.slice(index, index + unique)).size === unique;
+  }) + unique;
 
 export const solution = {
   step1: (dataset = file) => {
